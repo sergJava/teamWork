@@ -1,5 +1,6 @@
 package org.skypro.teamWork.repository;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -9,13 +10,13 @@ import java.util.UUID;
 public class RecommendationsRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public RecommendationsRepository(JdbcTemplate jdbcTemplate) {
+    public RecommendationsRepository(@Qualifier("recommendationsJdbcTemplate") JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public int getRandomTransactionAmount(UUID user) {
         Integer result = jdbcTemplate.queryForObject(
-                "SELECT amount FROM transactions t WHERE t.user_id=? LIMIT 1",
+                "SELECT amount FROM TRANSACTIONS t WHERE t.user_id=? LIMIT 1",
                 Integer.class,
                 user);
         return result != null ? result : 0;
